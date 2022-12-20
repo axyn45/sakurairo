@@ -2063,3 +2063,18 @@ function comment_users($postid=0,$which=0) {
     }
     return 0; //没有评论返回 0
 }
+
+function content_expiration_warning($content) {
+    if (is_single()) {
+        $modified = get_the_modified_time('U');
+        $current = current_time('timestamp');
+        $diffTime = ($current - $modified) / (60 * 60 * 24);
+        if ($diffTime > 30) {
+            $content = '<div class="warn"><font color="#FF0000"><i class="fa fa-exclamation-triangle faa-wrench animated"></i></font>本文最后更新于'.get_the_modified_time('Y年n月j日').
+            '，已超过 30 天没有更新。如果文章内容或图片资源失效，请留言或发送邮件反馈，感谢支持！</div>'.$content;
+        }
+    }
+    return $content;
+}
+add_filter('the_content', 'content_expiration_warning');
+    

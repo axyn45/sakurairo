@@ -23,6 +23,7 @@
 	<?php } ?>
 	<!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
 	<div class="entry-content">
+	<?php content_expiration_warning($content); ?>
 		<?php the_content(); ?>
 		<?php
 			wp_link_pages( array(
