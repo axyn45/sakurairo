@@ -2119,3 +2119,13 @@ function diary_custom_init()
     register_post_type('diary', $args);
 }
 add_action('init', 'diary_custom_init');
+
+
+//WordPress 只允许已登录的用户查看文章内容
+add_shortcode( 'members_only', 'members_only_shortcode' );
+function members_only_shortcode( $atts, $content = null ){
+	if ( is_user_logged_in() && !empty( $content ) && !is_feed() ){
+		return $content;
+	}
+	return '<blockquote><p>温馨提示：本处有隐藏内容！ <a href="'.wp_login_url( get_permalink() ).'">登录</a> 后即可查看！</p></blockquote>';//此处根据需要修改
+}
