@@ -7987,7 +7987,7 @@ i.iconfont.js-toggle-search.iconsearch:hover {
   }
 
   .post-footer {
-    display: none;
+    /* display: none; */
   }
 
   .post-tags {

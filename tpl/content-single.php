@@ -36,6 +36,14 @@
 	</div><!-- .entry-content -->
 	<?php the_reward(); ?>
 	<footer class="post-footer">
+	<?php $author_id=$post->post_author; ?>
+	<div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>  <?php the_title(); ?></h></span></div>
+	<div class="post-copyright__type"><span class="post-copyright-info"><a href="<?php echo get_permalink()?>"><?php echo get_permalink()?></a></span></div>
+	<div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h><?php the_author_meta( 'user_nicename' , $author_id ); ?> </h></div></div>
+	<div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h><?php the_time('Y-n-d'); ?></h></div></div>
+	<div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h><?php the_modified_time('Y-n-d'); ?></h></div></div>
+	<div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fa fa-creative-commons" aria-hidden="true"></i> </a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div>
+
 	<div class="post-tags">
 		<?php if ( has_tag() ) { echo '<i class="iconfont icon-tags"></i> '; the_tags('', ' ', ' ');}?>
 	</div>
