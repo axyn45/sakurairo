@@ -341,9 +341,9 @@ function convertip($ip)
     if ($result && $result['code'] != 0) {
         return "未知";
     }
-    if ($result['data']['country'] != '中国') {
-        return $result['data']['country'];
-    }
+    // if ($result['data']['country'] != '中国') {
+    //     return $result['data']['country'];
+    // }
     return $result['data']['country'] . '&nbsp;·&nbsp;' . $result['data']['region'] . '&nbsp;·&nbsp;' . $result['data']['city'];
 }
 //Comment Location End
@@ -2122,10 +2122,104 @@ add_action('init', 'diary_custom_init');
 
 
 //WordPress 只允许已登录的用户查看文章内容
-add_shortcode( 'members_only', 'members_only_shortcode' );
+add_shortcode( 'memb_only', 'members_only_shortcode' );
 function members_only_shortcode( $atts, $content = null ){
 	if ( is_user_logged_in() && !empty( $content ) && !is_feed() ){
 		return $content;
 	}
-	return '<blockquote><p>温馨提示：本处有隐藏内容！ <a href="'.wp_login_url( get_permalink() ).'">登录</a> 后即可查看！</p></blockquote>';//此处根据需要修改
+	return '<blockquote><p>本处内容仅注册用户可见！ <a href="'.wp_login_url( get_permalink() ).'">登录/注册</a> 后即可查看！</p></blockquote>';//此处根据需要修改
 }
+
+
+//获取用户身份
+function get_user_role($user_id)
+{
+    $user_meta = get_userdata($user_id);
+    return $user_meta->roles[0];
+}
+function get_current_user_role()
+{
+    $user_meta = get_userdata(wp_get_current_user()->ID);
+    return $user_meta->roles[0];
+}
+
+
+//WordPress 只允许权限用户查看文章内容
+add_shortcode( 'priv_only', 'privileged_only_shortcode' );
+function privileged_only_shortcode( $atts, $content = null ){
+	if ( is_user_logged_in() && !empty( $content ) && !is_feed() ){
+		if(strcmp(get_current_user_role(),"subscriber")!=0) return $content;
+        else return '<blockquote><p>该内容仅限贡献者及以上权限用户可查看！请<a href="mailto:me@okkk.cc">邮件</a>联系管理员！</p></blockquote>';
+	}
+	return '<blockquote><p>该内容仅限贡献者及以上权限用户可查看！ 请 <a href="'.wp_login_url( get_permalink() ).'">登录...</a></p></blockquote>';//此处根据需要修改
+}
+
+function GetIP()
+{
+    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key)
+    {
+        if (array_key_exists($key, $_SERVER) === true)
+        {
+            foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip)
+            {
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false)
+                {
+                    return $ip;
+                }
+            }
+        }
+    }
+}
+
+function GetGeoLocation(){
+    return "发布于".convertip(GetIP());
+}
+function GetPostGeoLocation(){
+    global $wpdb;
+    $post_id=get_the_ID();
+    $ip=$wpdb->get_row("SELECT post_author_IP, post_author_geo_zh_cn FROM wp_posts
+        WHERE ID=".$post_id);
+    if(!isset($ip)){
+        $wpdb->query("ALTER TABLE wp_posts ADD post_author_IP varchar(100) NOT NULL DEFAULT \"\"");
+    }
+    // $data=$ip->get(0);
+    // var_dump($ip);
+    return $ip->post_author_geo_zh_cn!=''?$ip->post_author_geo_zh_cn:$ip->post_author_IP;
+    // var_dump($ip);
+}
+
+// add_action('save_post','save_geo_info_on_publication');
+function save_geo_info($id) {
+// your code; $id is the post ID
+    // $id=441;
+    global $wpdb;
+    $ip=GetIP();
+    $geo=convertip($ip);
+    return '<p>'.$wpdb->query($wpdb->prepare('UPDATE wp_posts 
+        SET post_author_IP=%s,post_author_geo_zh_cn=%s
+        WHERE ID=%d',$ip,$geo,$id)).', '.$id.'</p>';
+}
+
+
+
+add_action('save_post','save_geo_info');
+
+// add_shortcode('test_db','save_geo_info_on_publication');
+add_shortcode('show_geo', 'GetPostGeoLocation');
+
+function desc2map($atts = array(), $content = null, $tag = '' ){
+    $addr='';
+    $zoom=15;
+    $custom_atts = shortcode_atts(array('zoom' => 15,'addr'=>''), $atts );
+    if(!empty($custom_atts['addr'])){
+        $addr=$custom_atts['addr'];
+    }
+    else $addr=$content;
+    if(!empty($custom_atts['zoom'])){
+        $zoom=$custom_atts['zoom'];
+    } 
+    // return $content;
+    return '<p><iframe id="desc2geo" src="https://api.okkk.cc/desc2geo.html?addr='
+        .$addr.'&zoom='.(string)$zoom.'" width="50%" height="300" style="border:none;"></iframe></p>'.'addr: '.$addr.' zoom: '.$zoom;
+}
+add_shortcode('desc2map','desc2map');
