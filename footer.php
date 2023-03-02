@@ -62,9 +62,9 @@ $reception_background = iro_opt('reception_background');
 			<a href="/wp-admin">
 				<img class="faa-shake animated-hover" src="https://cdn.jsdelivr.net/gh/mirai-mamori/web-img/img/avatar.jpeg" width="90" height="90">
 			</a>
-			<div class="m-avatar author"><a href="/login?action=register" title="登陆后台">注 册</a> | <a href="/login" title="登陆后台">登 陆</a>
+			<div class="m-avatar author"><a href="<?php $login_url = iro_opt('exlogin_url') ? iro_opt('exlogin_url') : wp_login_url(add_query_arg( $wp->query_vars, home_url( $wp->request ) ));echo $login_url; ?>/login?action=register" title="登陆后台">注 册</a> | <a href="<?php echo $login_url; ?>" title="登陆后台">登 陆</a>
 			<?php }
-			else { ?> <a href="/wp-admin"><div class="img"><?php global $userdata; wp_get_current_user(); echo get_avatar($userdata->ID, 90); ?></a></div> <div class="author"> <?php echo $user_identity; ?>  |  <a href="<?php echo wp_logout_url(get_bloginfo('url')); ?>" target="_top"><?php _e('退出','sakurairo')/*退出登录*/?></a>
+			else { ?> <a href="/wp-admin"><div class="img"><?php global $userdata; wp_get_current_user(); echo get_avatar($userdata->ID, 90); ?></a></div> <div class="author"> <?php echo $user_identity; ?> <?php echo get_current_user_role() ?> |  <a href="<?php echo wp_logout_url(get_bloginfo('url')); ?>" target="_top"><?php _e('退出','sakurairo')/*退出登录*/?></a>
 			<?php } ?>
 			</div>
 			<!-- </center> -->
