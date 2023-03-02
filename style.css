@@ -1254,8 +1254,13 @@ h1.page-title {
   transition: all 0.8s ease !important;
 }
 
+@media (max-width: 860px)
+.post-footer, .post-like, .post-share {
+    display: none;
+}
+
 .post-footer {
-  padding: 30px 0;
+  /* padding: 30px 0;
   width: 740px;
   height: 80px;
   left: 50%;
@@ -1266,8 +1271,23 @@ h1.page-title {
   box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
   margin-bottom: 50px;
   margin-top: 50px;
-  border-radius: 15px;
+  border-radius: 15px; */
+
+  padding: 20px 20px;
+  height: 180px!important;
+  background-color: #000;
+  border-radius: 12px !important;
+  background-image: url(https://cdn.jsdelivr.net/gh/flurrychan/Sakura/cc_icon.png);
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  -webkit-transition: box-shadow 0.3s ease-in-out;
+  -moz-transition: box-shadow 0.3s ease-in-out;
+  -o-transition: box-shadow 0.3s ease-in-out;
+  -ms-transition: box-shadow 0.3s ease-in-out;
+  transition: box-shadow 0.3s ease-in-out;
 }
+
+
 
 .post-tags {
   float: left;
@@ -7987,7 +8007,7 @@ i.iconfont.js-toggle-search.iconsearch:hover {
   }
 
   .post-footer {
-    /* display: none; */
+    display: none;
   }
 
   .post-tags {
@@ -9855,4 +9875,8 @@ body.dark #pagination a {
   box-shadow: 0 1px 20px 2px rgba(26,26,26,0.8);
   color: #CCCCCC;
   transition: all 0.8s ease !important;
+}
+
+figcaption{
+  text-align: center !important;
 }

@@ -17,7 +17,11 @@
 	<?php if(should_show_title()) { ?>
 	<header class="entry-header">
 		<h1 class="entry-title"><?php the_title(); ?></h1>
-		<p class="entry-census"><?php echo poi_time_since(strtotime($post->post_date)); ?>&nbsp;&nbsp;<?php echo get_post_views(get_the_ID()).' '. _n('View','Views',get_post_views(get_the_ID()),'sakurairo')/*次阅读*/?> </p>
+		<p class="entry-census">
+			<i class="fa-solid fa-pen-nib"></i><?php echo poi_time_since(strtotime($post->post_date)); ?>&nbsp;&nbsp;
+			<i class="fa-sharp fa-regular fa-eye"></i><?php echo get_post_views(get_the_ID()).' '. _n('View','Views',get_post_views(get_the_ID()),'sakurairo')/*次阅读*/?>&nbsp;&nbsp;
+			<i class="fa-sharp fa-solid fa-location-dot"></i><?php echo GetPostGeoLocation()?>
+		</p>
 		<hr>
 	</header><!-- .entry-header -->
 	<?php } ?>

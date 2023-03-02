@@ -28,6 +28,7 @@ $mashiro_logo = iro_opt('mashiro_logo');
 <html <?php language_attributes(); ?>>
 
 <head>
+	<script src="https://kit.fontawesome.com/c32d8f27e9.js" crossorigin="anonymous"></script>
 	<meta name="theme-color">
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->

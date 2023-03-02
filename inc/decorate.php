@@ -786,7 +786,7 @@ h1.main-title, h1.fes-title,.the-feature.from_left_and_right .info,.header-info 
 
 <?php if (!iro_opt('article_lincenses', 'true')): ?>
 .post-footer {
-/* display:none; */
+display:none;
 }
 <?php endif; ?>
 
